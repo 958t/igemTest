@@ -18,16 +18,16 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Build with Jekyll
-        run: |
-          gem install bundler
-          bundle install
-          bundle exec jekyll build -d ./_site
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site
+     steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        bundler-cache: true
+    - name: Build with Jekyll
+      run: |
+        bundle config set --local path 'vendor/bundle'
+        bundle install
+        bundle exec jekyll build -d ./_site
+    - name: Deploy
