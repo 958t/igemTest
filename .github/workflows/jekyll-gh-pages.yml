@@ -1,0 +1,32 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Set up Python environment
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.6'
+    
+    - name: Install dependencies
+      run: pip install --no-cache-dir -r dependencies.txt
+    
+    - name: Build and Freeze
+      run: |
+        FLASK_APP=app.py flask freeze
+      
+    - name: Publish artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: Public files
+        path: public
